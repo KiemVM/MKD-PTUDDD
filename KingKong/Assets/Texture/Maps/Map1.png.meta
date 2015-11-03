@@ -1,0 +1,333 @@
+fileFormatVersion: 2
+guid: d83baf24abc328c49b49a00207eb7cfb
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Map1_0
+    21300002: Map1_1
+    21300004: Map1_2
+    21300006: Map1_3
+    21300008: Map1_4
+    21300010: Map1_5
+    21300012: Map1_6
+    21300014: Map1_7
+    21300016: Map1_8
+    21300018: Map1_9
+    21300020: Map1_10
+    21300022: Map1_11
+    21300024: Map1_12
+    21300026: Map1_13
+    21300028: Map1_14
+    21300030: Map1_15
+    21300032: Map1_16
+    21300034: Map1_17
+    21300036: Map1_18
+    21300038: Map1_19
+    21300040: Map1_20
+    21300042: Map1_21
+    21300044: Map1_22
+    21300046: Map1_23
+    21300048: Map1_24
+    21300050: Map1_25
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Map1_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 169
+        width: 150
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_1
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 193
+        width: 24
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_2
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 201
+        width: 3
+        height: 9
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_3
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 107
+        width: 3
+        height: 88
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_4
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 81
+        width: 48
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_5
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 121
+        width: 32
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_6
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 96
+        width: 64
+        height: 9
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_7
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 161
+        width: 64
+        height: 8
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_8
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 16
+        width: 72
+        height: 9
+      alignment: 9
+      pivot: {x: .524498045, y: .15702945}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_9
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 14
+        width: 32
+        height: 27
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_10
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 14
+        width: 24
+        height: 19
+      alignment: 9
+      pivot: {x: .420382023, y: -.302306086}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_11
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 14
+        width: 33
+        height: 27
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_12
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 16
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_13
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 42
+        width: 2
+        height: 128
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_14
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 50
+        width: 0
+        height: 118
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_15
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 90
+        width: 2
+        height: 30
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_16
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 41
+        width: 3
+        height: 39
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_17
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 69
+        width: 2
+        height: 99
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_18
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 100
+        width: 1
+        height: 68
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_19
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 65
+        width: 2
+        height: 95
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_20
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 84
+        width: 2
+        height: 76
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_21
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 106
+        width: 2
+        height: 88
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_22
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 66
+        width: 3
+        height: 30
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_23
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 67
+        width: 2
+        height: 28
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_24
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 194
+        width: 3
+        height: 14
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Map1_25
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 257
+        height: 240
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
