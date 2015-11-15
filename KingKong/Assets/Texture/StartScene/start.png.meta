@@ -1,11 +1,7 @@
 fileFormatVersion: 2
-guid: d77266861083cef4aad3b886eb58a1af
+guid: 84ff245bf4172544eb0f2c676ee2bd01
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: start_2
-    21300002: start_3
-    21300004: start_7
-    21300006: start_3
+  fileIDToRecycleName: {}
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -29,9 +25,9 @@ TextureImporter:
   maxTextureSize: 1024
   textureSettings:
     filterMode: -1
-    aniso: 16
+    aniso: -1
     mipBias: -1
-    wrapMode: 1
+    wrapMode: -1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -46,46 +42,6 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites:
-    - name: start_2
-      rect:
-        serializedVersion: 2
-        x: 208
-        y: 106
-        width: 64
-        height: 23
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 23, z: 0, w: 0}
-    - name: start_3
-      rect:
-        serializedVersion: 2
-        x: 207
-        y: 141
-        width: 64
-        height: 22
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 22, z: 0, w: 0}
-    - name: start_7
-      rect:
-        serializedVersion: 2
-        x: 208
-        y: 66
-        width: 64
-        height: 25
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: start_3
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 300
-        height: 168
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+    sprites: []
   spritePackingTag: 
   userData: 

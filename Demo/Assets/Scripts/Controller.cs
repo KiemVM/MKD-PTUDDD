@@ -155,7 +155,7 @@ public class Controller : MonoBehaviour {
 	void ProcessJumpLeft()
 	{
 		if (Input.GetKey ("space"))		
-			transform.Translate (0, fDelta, 0);
+			transform.Translate (0, 2 * fDelta, 0);
 
 		if (Input.GetKey ("left"))
 			transform.Translate (-fDelta, 0, 0);
@@ -164,7 +164,7 @@ public class Controller : MonoBehaviour {
 	void ProcessJumpRight()
 	{
 		if (Input.GetKey ("space"))
-			transform.Translate (0, fDelta, 0);
+			transform.Translate (0, 2 * fDelta, 0);
 
 		if (Input.GetKey ("right"))
 			transform.Translate (fDelta, 0, 0);

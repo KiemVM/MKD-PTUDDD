@@ -46,7 +46,6 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\ControllerEnemy.cs" />
      <Compile Include="Assets\Scripts\ColumnStruct.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
      <Compile Include="Assets\Scripts\FruitController.cs" />
