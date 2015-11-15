@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MainCamera : MonoBehaviour {
+public class GameOver : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -13,14 +13,9 @@ public class MainCamera : MonoBehaviour {
 	
 	}
 
-    public void ClickBtnStart()
+    public void ClickBtnContinue()
     {
-        Application.LoadLevel("KingKongJR");
-    }
-
-    public void ClickBtnGuide()
-    {
-        Application.LoadLevel("Guide");
+        Application.LoadLevel("start");
     }
 
     public void ClickBtnExit()
