@@ -48,6 +48,8 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\ColumnStruct.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
+     <Compile Include="Assets\Scripts\FruitController.cs" />
+     <Compile Include="Assets\Scripts\MapStruct.cs" />
      <Compile Include="Assets\Scripts\NhanVatControler.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
