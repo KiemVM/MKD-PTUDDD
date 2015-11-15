@@ -20,6 +20,13 @@ public class NhanVatControler : MonoBehaviour {
         iVoiDay = 5;
 
     private float myClumnStart, myColumnEnd;
+
+    //bien de nhan nut android
+    public bool bJump = false;
+    public bool bLeft = false;
+    public bool bRight = false;
+    public bool bUp = false;
+    public bool bDown = false;
 		
 	// Use this for initialization
 	void Start () {
