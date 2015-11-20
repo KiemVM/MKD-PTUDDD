@@ -1,9 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controller.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\ControllerEnemy.cs">
     <Files>
-      <File FileName="Assets\Scripts\ColumnStruct.cs" Line="6" Column="1" />
-      <File FileName="Assets\Scripts\Controller.cs" Line="162" Column="3" />
+      <File FileName="Assets\Scripts\Controller.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\FruitController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MapStruct.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\ColumnStruct.cs" Line="1" Column="1" />
+      <File FileName="Assets\ControllerEnemy.cs" Line="21" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

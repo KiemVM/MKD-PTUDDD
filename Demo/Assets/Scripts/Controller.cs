@@ -10,6 +10,8 @@ public class Controller : MonoBehaviour {
 	public const float fDistanceColumnX = 0.9f;
 	public const float fDistanceColumnY = 0.8f;
 	public const float fDelta = 0.1f;
+	public const float fSpeedJumpX = 3.0f;
+	public const float fSpeedJumpY = 5.0f;
 	public const int iMaxCount = 12;
 	public const float iMaxHighJumpDown = 3.5f;
 	public const int 
@@ -66,24 +68,25 @@ public class Controller : MonoBehaviour {
 
 	void ProcessIdle()
 	{
+		SetGravity (1);
+		m_animator.speed = 1;
 
-
-		if (Input.GetKey ("space"))
+		if (Input.GetKeyDown ("space"))
 		{
-			transform.Translate (0, fDelta, 0);
 			m_YJump = transform.position.y;
+			gameObject.rigidbody2D.velocity = new Vector2(0, fSpeedJumpY);
 			m_animator.SetTrigger ("TriggerJumpLeft");
 			m_iState = iJumpLeft;
 		}
 
 
-		if (Input.GetKey ("left")) 
+		if (Input.GetKeyDown ("left")) 
 		{
 			m_animator.SetTrigger ("TriggerGoLeft");
 			m_iState = iGoLeft;
 		}
 
-		if (Input.GetKey ("right"))
+		if (Input.GetKeyDown ("right"))
 		{
 			m_animator.SetTrigger ("TriggerGoRight");
 			m_iState = iGoRight;
@@ -92,15 +95,20 @@ public class Controller : MonoBehaviour {
 
 	void ProcessGoLeft()
 	{
+		SetGravity (1);
+
 		if (Input.anyKey)
 			m_animator.speed = 1;
 		else
-			m_animator.speed = 0;
+			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
 
-		if (Input.GetKey ("space"))
+		if (Input.GetKeyDown ("space"))
 		{
-			transform.Translate (0, fDelta, 0);
 			m_YJump = transform.position.y;
+			if (Input.GetKey("left")) 
+				gameObject.rigidbody2D.velocity = new Vector2(-fSpeedJumpX, fSpeedJumpY);
+			else
+				gameObject.rigidbody2D.velocity = new Vector2(0, fSpeedJumpY);
 			m_animator.SetTrigger ("TriggerJumpLeft");
 			m_iState = iJumpLeft;
 		}
@@ -123,15 +131,21 @@ public class Controller : MonoBehaviour {
 	}
 	void ProcessGoRight()
 	{
+		SetGravity (1);
+
 		if (Input.anyKey)
 			m_animator.speed = 1;
 		else
-			m_animator.speed = 0;
+			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
 
-		if (Input.GetKey ("space"))
+		if (Input.GetKeyDown ("space"))
 		{
-			transform.Translate (0, fDelta, 0);
 			m_YJump = transform.position.y;
+			if (Input.GetKey("right"))
+			    gameObject.rigidbody2D.velocity = new Vector2(fSpeedJumpX, fSpeedJumpY);
+			else
+				gameObject.rigidbody2D.velocity = new Vector2(0, fSpeedJumpY);
+
 			m_animator.SetTrigger ("TriggerJumpRight");
 			m_iState = iJumpRight;
 		}
@@ -154,24 +168,33 @@ public class Controller : MonoBehaviour {
 
 	void ProcessJumpLeft()
 	{
-		if (Input.GetKey ("space"))		
-			transform.Translate (0, 2 * fDelta, 0);
+		SetGravity (1);
+		m_animator.speed = 1;
+
+		/*if (Input.GetKey ("space"))		
+			transform.Translate (0, fDelta, 0);
 
 		if (Input.GetKey ("left"))
-			transform.Translate (-fDelta, 0, 0);
+			transform.Translate (-fDelta, 0, 0);*/
 
 	}
 	void ProcessJumpRight()
 	{
-		if (Input.GetKey ("space"))
-			transform.Translate (0, 2 * fDelta, 0);
+		SetGravity (1);
+		m_animator.speed = 1;
+
+		/*if (Input.GetKey ("space"))
+			transform.Translate (0, fDelta, 0);
 
 		if (Input.GetKey ("right"))
-			transform.Translate (fDelta, 0, 0);
+			transform.Translate (fDelta, 0, 0);*/
 	}
 
 	void ProcessDieLeft()
 	{
+		SetGravity (1);
+		m_animator.speed = 1;
+
 		float fYDown;
 		m_iStartDie++;
 		if (m_iStartDie > 120)
@@ -179,7 +202,7 @@ public class Controller : MonoBehaviour {
 			fYDown = ((MapStruct)GameObject.FindGameObjectWithTag ("Ground").GetComponent ("MapStruct")).m_YDown;
 			if (fYDown < this.transform.position.y - fDistanceColumnY)
 			{
-				this.rigidbody2D.isKinematic = true;
+				gameObject.rigidbody2D.isKinematic = true;
 				transform.Translate (0, -fDelta, 0);
 			}
 			else
@@ -191,6 +214,9 @@ public class Controller : MonoBehaviour {
 	}
 	void ProcessDieRight()
 	{
+		SetGravity (1);
+		m_animator.speed = 1;
+
 		float fYDown;
 		m_iStartDie++;
 		if (m_iStartDie > 120)
@@ -198,7 +224,7 @@ public class Controller : MonoBehaviour {
 			fYDown = ((MapStruct)GameObject.FindGameObjectWithTag ("Ground").GetComponent ("MapStruct")).m_YDown;
 			if (fYDown < this.transform.position.y - fDistanceColumnY)
 			{
-				this.rigidbody2D.isKinematic = true;
+				gameObject.rigidbody2D.isKinematic = true;
 				transform.Translate (0, -fDelta, 0);
 			}
 			else
@@ -210,10 +236,13 @@ public class Controller : MonoBehaviour {
 
 	void ProcessClimbLeft()
 	{
+		SetGravity (0);
+		m_animator.speed = 1;
+
 		if (Input.anyKey)
 			m_animator.speed = 1;
 		else
-			m_animator.speed = 0;
+			
 
 		if (Input.GetKey ("up"))
 		{
@@ -235,16 +264,16 @@ public class Controller : MonoBehaviour {
 			
 		}
 
-		if (Input.GetKey ("left") && (m_iCountAuto == iMaxCount))
+		if (Input.GetKeyDown ("left"))
 		{
 			m_iCountAuto = 0;
 			m_YJump = transform.position.y;
-			m_animator.SetTrigger ("TriggerJumpLeft");
-			m_iState = iJumpLeft;
+			m_animator.SetTrigger ("TriggerReachLeft");
+			m_iState = iReachLeft;
 			return;
 		}
 
-		if (Input.GetKey ("right") && (m_iCountAuto == iMaxCount))
+		if (Input.GetKeyDown ("right"))
 		{
 			m_iCountAuto = 0;
 			m_animator.SetTrigger ("TriggerClimbRight");
@@ -264,10 +293,13 @@ public class Controller : MonoBehaviour {
 
 	void ProcessClimbRight()
 	{
+		SetGravity (0);
+		m_animator.speed = 1;
+
 		if (Input.anyKey)
 			m_animator.speed = 1;
 		else
-			m_animator.speed = 0;
+			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
 
 		if (Input.GetKey ("up"))
 		{
@@ -290,16 +322,16 @@ public class Controller : MonoBehaviour {
 		}
 
 
-		if (Input.GetKey ("right") && (m_iCountAuto == iMaxCount))
+		if (Input.GetKeyDown ("right"))
 		{
 			m_iCountAuto = 0;
 			m_YJump = transform.position.y;
-			m_animator.SetTrigger ("TriggerJumpRight");
-			m_iState = iJumpRight;
+			m_animator.SetTrigger ("TriggerReachRight");
+			m_iState = iReachRight;
 			return;
 		}
 
-		if (Input.GetKey ("left") && (m_iCountAuto == iMaxCount))
+		if (Input.GetKeyDown ("left"))
 		{
 			m_iCountAuto = 0;
 			m_animator.SetTrigger ("TriggerClimbLeft");
@@ -319,10 +351,13 @@ public class Controller : MonoBehaviour {
 
 	void ProcessClimbDouble()
 	{
+		SetGravity (0);
+		m_animator.speed = 1;
+
 		if (Input.anyKey)
 			m_animator.speed = 1;
 		else
-			m_animator.speed = 0;
+			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
 
 		if (Input.GetKey ("up"))
 		{
@@ -346,28 +381,58 @@ public class Controller : MonoBehaviour {
 
 	void ProcessReachLeft()
 	{
+		SetGravity(0);
+		m_animator.speed = 1;
+
+		if (Input.GetKeyDown ("left"))
+		{
+			m_YJump = transform.position.y;
+			transform.Translate(-0.1f, 0, 0);
+			m_animator.SetTrigger ("TriggerJumpLeft");
+			m_iState = iJumpLeft;
+			return;
+		}
+
+		if (Input.GetKeyDown ("right"))
+		{
+			m_iCountAuto = 0;
+			m_animator.SetTrigger ("TriggerClimbLeft");
+			m_iState = iClimbLeft;
+			return;
+		}
 	}
 
 	void ProcessReachRight()
 	{
+		SetGravity(0);
+		m_animator.speed = 1;
+
+		if (Input.GetKeyDown ("right"))
+		{
+			m_YJump = transform.position.y;
+			transform.Translate(0.1f, 0, 0);
+			m_animator.SetTrigger ("TriggerJumpRight");
+			m_iState = iJumpRight;
+			return;
+		}
+
+		if (Input.GetKeyDown ("left"))
+		{
+			m_iCountAuto = 0;
+			m_animator.SetTrigger ("TriggerClimbRight");
+			m_iState = iClimbRight;
+			return;
+		}
 	}
 	
 	void Update() {
-			
-		m_animator.speed = 1;
-
 		m_iCountAuto++;
 		if (m_iCountAuto > iMaxCount) 
 			m_iCountAuto = iMaxCount;
 
-		if ((m_iState == iClimbLeft) 
-			|| (m_iState == iClimbRight)
-			|| (m_iState == iClimbDouble))
-			SetGravity (0);
-		else
-			SetGravity (1);
+
 		if (!((m_iState == iDieLeft) || (m_iState == iDieRight)))
-			this.rigidbody2D.isKinematic = false;
+			gameObject.rigidbody2D.isKinematic = false;
 
 		switch (m_iState)
 		{
@@ -423,8 +488,9 @@ public class Controller : MonoBehaviour {
 	}
 
 
-		void OnCollisionEnter2D(Collision2D coll) {
+	void OnCollisionEnter2D(Collision2D coll) {
 
+		gameObject.rigidbody2D.velocity = new Vector2 (0, 0);
 		m_animator.speed = 1;
 
 		if ((m_iState == iDieLeft) || (m_iState == iDieRight))
@@ -469,11 +535,16 @@ public class Controller : MonoBehaviour {
 
 		if (coll.gameObject.tag == "Ground")
 		{
-			if (m_YJump - transform.position.y > iMaxHighJumpDown)
+			if ((m_iState == iJumpLeft) || (m_iState == iJumpRight) 
+			    || (m_iState == iGoLeft) || (m_iState == iGoRight)
+			    || (m_iState == iReachLeft) || (m_iState == iReachRight))
 			{
-				m_animator.SetTrigger("TriggerDieLeft");
-				m_iState = iDieLeft;
-				return;
+				if (m_YJump - transform.position.y > iMaxHighJumpDown)
+				{
+					m_animator.SetTrigger("TriggerDieLeft");
+					m_iState = iDieLeft;
+					return;
+				}
 			}
 
 			if (m_iState == iJumpLeft)
