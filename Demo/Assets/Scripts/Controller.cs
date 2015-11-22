@@ -5,8 +5,6 @@ using MapStructNS;
 
 public class Controller : MonoBehaviour {
 
-
-	
 	public const float fDistanceColumnX = 0.7f;
 	public const float fDistanceColumnY = 0.7f;
 	public const float fDelta = 0.1f;
@@ -33,6 +31,8 @@ public class Controller : MonoBehaviour {
 		iDieRight = 9, 
 		iReachLeft = 10, 
 		iReachRight = 11;
+
+	public AudioClip auGo, auJump, auClimbSingle, auClimbDouble, auDie;
 
 	public float m_YJump;
 	public float m_ColumnUpY, m_ColumnDownY;
@@ -83,6 +83,9 @@ public class Controller : MonoBehaviour {
 		{
 			m_YJump = transform.position.y;
 			gameObject.rigidbody2D.velocity = new Vector2(0, fSpeedJumpY);
+			audio.loop = false;
+			audio.clip = auJump;
+			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpLeft");
 			m_iState = iJumpLeft;
 		}
@@ -90,6 +93,9 @@ public class Controller : MonoBehaviour {
 
 		if (Input.GetKeyDown ("left")) 
 		{
+			audio.loop = true;
+			audio.clip = auGo;
+			audio.Play();
 			m_animator.SetTrigger ("TriggerGoLeft");
 			m_iState = iGoLeft;
 		}
@@ -106,9 +112,15 @@ public class Controller : MonoBehaviour {
 		SetGravity (1);
 
 		if (Input.anyKey)
+		{
 			m_animator.speed = 1;
+			audio.mute = false;
+		}
 		else
+		{
 			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
+			audio.mute = true;
+		}
 
 		if (Input.GetKeyDown ("space") && bIsOnGround)
 		{
@@ -117,6 +129,9 @@ public class Controller : MonoBehaviour {
 				gameObject.rigidbody2D.velocity = new Vector2(-fSpeedJumpX, fSpeedJumpY);
 			else
 				gameObject.rigidbody2D.velocity = new Vector2(0, fSpeedJumpY);
+			audio.loop = false;
+			audio.clip = auJump;
+			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpLeft");
 			m_iState = iJumpLeft;
 		}
@@ -143,9 +158,15 @@ public class Controller : MonoBehaviour {
 		SetGravity (1);
 
 		if (Input.anyKey)
+		{
 			m_animator.speed = 1;
+			audio.mute = false;
+		}
 		else
+		{
 			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
+			audio.mute = true;
+		}
 
 		if (Input.GetKeyDown ("space") && bIsOnGround)
 		{
@@ -155,6 +176,9 @@ public class Controller : MonoBehaviour {
 			else
 				gameObject.rigidbody2D.velocity = new Vector2(0, fSpeedJumpY);
 
+			audio.loop = false;
+			audio.clip = auJump;
+			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpRight");
 			m_iState = iJumpRight;
 		}
@@ -171,6 +195,9 @@ public class Controller : MonoBehaviour {
 
 		if (Input.GetKey ("left"))
 		{
+			audio.loop = true;
+			audio.clip = auGo;
+			audio.Play();
 			m_animator.SetTrigger ("TriggerGoLeft");
 			m_iState = iGoLeft;
 		}
@@ -250,9 +277,15 @@ public class Controller : MonoBehaviour {
 		m_animator.speed = 1;
 
 		if (Input.anyKey)
+		{
 			m_animator.speed = 1;
+			audio.mute = false;
+		}
 		else
+		{
 			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
+			audio.mute = true;
+		}
 
 		if (Input.GetKey ("up"))
 		{
@@ -277,6 +310,9 @@ public class Controller : MonoBehaviour {
 		if (Input.GetKeyDown ("right"))
 		{
 			m_iCountAuto = 0;
+			audio.loop = true;
+			audio.clip = auClimbSingle;
+			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbRight");
 			m_iState = iClimbRight;
 			transform.Translate(2 * fDistanceColumnX, 0, 0);
@@ -287,6 +323,9 @@ public class Controller : MonoBehaviour {
 		{
 			m_YJump = transform.position.y;
 			gameObject.transform.Translate(m_ColumnX - gameObject.transform.position.x, 0, 0);
+			audio.loop = false;
+			audio.clip = auJump;
+			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpRight");
 			m_iState = iJumpRight;
 			return;
@@ -299,9 +338,15 @@ public class Controller : MonoBehaviour {
 		m_animator.speed = 1;
 
 		if (Input.anyKey)
+		{
 			m_animator.speed = 1;
+			audio.mute = false;
+		}
 		else
+		{
 			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
+			audio.mute = true;
+		}
 
 		if (Input.GetKey ("up"))
 		{
@@ -327,6 +372,9 @@ public class Controller : MonoBehaviour {
 		{
 			m_iCountAuto = 0;
 			m_animator.SetTrigger ("TriggerClimbLeft");
+			audio.loop = true;
+			audio.clip = auClimbSingle;
+			audio.Play();
 			m_iState = iClimbLeft;
 			transform.Translate(-2 * fDistanceColumnX, 0, 0);
 			return;
@@ -336,6 +384,9 @@ public class Controller : MonoBehaviour {
 		{
 			m_YJump = transform.position.y;
 			gameObject.transform.Translate(m_ColumnX - gameObject.transform.position.x, 0, 0);
+			audio.loop = false;
+			audio.clip = auJump;
+			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpLeft");
 			m_iState = iJumpLeft;
 			return;
@@ -348,10 +399,18 @@ public class Controller : MonoBehaviour {
 		m_animator.speed = 1;
 
 		SetBoxCollider ((m_RightColumnX - m_LeftColumnX) / transform.localScale.x - 0.1f / transform.localScale.x , boxBigY);
+
 		if (Input.anyKey)
+		{
 			m_animator.speed = 1;
+			audio.mute = false;
+		}
 		else
+		{
 			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
+			audio.mute = true;
+		}
+
 
 		if (Input.GetKey ("up"))
 		{
@@ -372,6 +431,9 @@ public class Controller : MonoBehaviour {
 			transform.Translate(m_ColumnX - transform.position.x + fDistanceColumnX, 0, 0);
 
 			m_iCountAuto = 0;
+			audio.loop = true;
+			audio.clip = auClimbSingle;
+			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbRight");
 			m_iState = iClimbRight;
 			return;
@@ -386,6 +448,9 @@ public class Controller : MonoBehaviour {
 			transform.Translate(m_ColumnX - transform.position.x - fDistanceColumnX, 0, 0);
 
 			m_iCountAuto = 0;
+			audio.loop = true;
+			audio.clip = auClimbSingle;
+			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbLeft");
 			m_iState = iClimbLeft;
 			return;
@@ -400,6 +465,9 @@ public class Controller : MonoBehaviour {
 			transform.Translate(m_ColumnX - transform.position.x - fDistanceColumnX, 0, 0);
 
 			m_iCountAuto = 0;
+			audio.loop = true;
+			audio.clip = auClimbSingle;
+			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbLeft");
 			m_iState = iClimbLeft;
 			return;
@@ -414,6 +482,9 @@ public class Controller : MonoBehaviour {
 			transform.Translate(m_ColumnX - transform.position.x + fDistanceColumnX, 0, 0);
 
 			m_iCountAuto = 0;
+			audio.loop = true;
+			audio.clip = auClimbSingle;
+			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbRight");
 			m_iState = iClimbRight;
 			return;
@@ -430,6 +501,9 @@ public class Controller : MonoBehaviour {
 		{
 			m_YJump = transform.position.y;
 			transform.Translate(-0.1f, 0.1f, 0);
+			audio.loop = false;
+			audio.clip = auJump;
+			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpLeft");
 			m_iState = iJumpLeft;
 			return;
@@ -441,6 +515,9 @@ public class Controller : MonoBehaviour {
 			transform.Translate(m_ColumnX - transform.position.x - fDistanceColumnX, 0, 0);
 
 			m_iCountAuto = 0;
+			audio.loop = true;
+			audio.clip = auClimbSingle;
+			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbLeft");
 			m_iState = iClimbLeft;
 			return;
@@ -456,6 +533,9 @@ public class Controller : MonoBehaviour {
 		{
 			m_YJump = transform.position.y;
 			transform.Translate(0.1f, 0.1f, 0);
+			audio.loop = false;
+			audio.clip = auJump;
+			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpRight");
 			m_iState = iJumpRight;
 			return;
@@ -467,6 +547,9 @@ public class Controller : MonoBehaviour {
 			transform.Translate(m_ColumnX - transform.position.x + fDistanceColumnX, 0, 0);
 
 			m_iCountAuto = 0;
+			audio.loop = true;
+			audio.clip = auClimbSingle;
+			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbRight");
 			m_iState = iClimbRight;
 			return;
@@ -480,7 +563,15 @@ public class Controller : MonoBehaviour {
 			listBox[i].size = new Vector2(fX, fY);
 	}
 
+	void SetStateAnimator()
+	{
+		m_animator.SetInteger ("iState", m_iState);
+	}
+
 	void Update() {
+
+		SetStateAnimator ();
+
 		m_iCountAuto++;
 		if (m_iCountAuto > iMaxCount) 
 			m_iCountAuto = iMaxCount;
@@ -558,6 +649,9 @@ public class Controller : MonoBehaviour {
 
 		if (coll.gameObject.tag == "EnemyRed")
 		{
+			audio.loop = false;
+			audio.clip = auJump;
+			audio.PlayOneShot(auDie);
 			m_animator.SetTrigger ("TriggerDieLeft");
 			m_iState = iDieLeft;
 			return;
@@ -574,6 +668,9 @@ public class Controller : MonoBehaviour {
 
 				transform.Translate(coll.gameObject.transform.position.x - transform.position.x + fDistanceColumnX, 0, 0);
 				m_iCountAuto = 0;
+				audio.loop = true;
+				audio.clip = auClimbSingle;
+				audio.Play();
                	m_animator.SetTrigger ("TriggerClimbRight");
 				m_iState = iClimbRight;
 			}
@@ -585,6 +682,9 @@ public class Controller : MonoBehaviour {
 
 				transform.Translate(coll.gameObject.transform.position.x - transform.position.x - fDistanceColumnX, 0, 0);
 				m_iCountAuto = 0;
+				audio.loop = true;
+				audio.clip = auClimbSingle;
+				audio.Play();
 				m_animator.SetTrigger ("TriggerClimbLeft");
 				m_iState = iClimbLeft;
 			}
@@ -614,6 +714,9 @@ public class Controller : MonoBehaviour {
 						m_LeftColumnX = m_ColumnX;
 					}
 
+					audio.loop = true;
+					audio.clip = auClimbDouble;
+					audio.Play();
 					m_animator.SetTrigger("TriggerClimbDouble");
 					m_iState = iClimbDouble;
 				}
@@ -623,6 +726,9 @@ public class Controller : MonoBehaviour {
 
 		if (coll.gameObject.tag == "Water")
 		{
+			audio.loop = false;
+			audio.clip = auJump;
+			audio.PlayOneShot(auDie);
 			m_animator.SetTrigger ("TriggerDieLeft");
 			m_iState = iDieLeft;
 			return;
@@ -637,6 +743,9 @@ public class Controller : MonoBehaviour {
 			{
 				if (m_YJump - transform.position.y > iMaxHighJumpDown)
 				{
+					audio.loop = false;
+					audio.clip = auJump;
+					audio.PlayOneShot(auDie);
 					m_animator.SetTrigger("TriggerDieLeft");
 					m_iState = iDieLeft;
 					return;
@@ -647,6 +756,9 @@ public class Controller : MonoBehaviour {
 			{
 				m_iCountAuto = 0;
 				m_animator.speed = 1;
+				audio.loop = true;
+				audio.clip = auGo;
+				audio.Play();
 				m_animator.SetTrigger ("TriggerGoLeft");
 				m_iState = iGoLeft;
 			}
@@ -660,6 +772,12 @@ public class Controller : MonoBehaviour {
 		}
 	}
 
+	void OnCollisionStay2D(Collision2D coll) {
+		if (coll.gameObject.tag == "Ground")
+		{
+			bIsOnGround = true;
+		}
+	}
 
 	void OnCollisionExit2D(Collision2D coll) {
 		if (coll.gameObject.tag == "Ground")
