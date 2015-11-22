@@ -7,13 +7,19 @@ public class Controller : MonoBehaviour {
 
 
 	
-	public const float fDistanceColumnX = 0.9f;
-	public const float fDistanceColumnY = 0.8f;
+	public const float fDistanceColumnX = 0.7f;
+	public const float fDistanceColumnY = 0.7f;
 	public const float fDelta = 0.1f;
-	public const float fSpeedJumpX = 3.0f;
-	public const float fSpeedJumpY = 5.0f;
+	public const float fSpeedJumpX = 2.0f;
+	public const float fSpeedJumpY = 6.0f;
 	public const int iMaxCount = 12;
-	public const float iMaxHighJumpDown = 3.5f;
+	public const float iMaxHighJumpDown = 2.5f;
+	public const float boxSmallX = 0.14f;
+	public const float boxSmallY = 0.14f;
+	public const float boxBigX = 0.25f;
+	public const float boxBigY = 0.14f;
+	public bool bIsOnGround = true;
+
 	public const int 
 		iIdle = 0,
 		iGoLeft = 1,
@@ -29,9 +35,11 @@ public class Controller : MonoBehaviour {
 		iReachRight = 11;
 
 	public float m_YJump;
-	public float m_ColumnUp, m_ColumnDown;
-	public float m_LeftColumnUp, m_LeftColumnDown;
-	public float m_RightColumnUp, m_RightColumnDown;
+	public float m_ColumnUpY, m_ColumnDownY;
+	public float m_ColumnX;
+	public float m_LeftColumnUpY, m_LeftColumnDownY;
+	public float m_RightColumnUpY, m_RightColumnDownY;
+	public float m_LeftColumnX, m_RightColumnX;
 	public int m_iState;
 	public Animator m_animator;
 	public int m_iCountAuto = 0;
@@ -102,7 +110,7 @@ public class Controller : MonoBehaviour {
 		else
 			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
 
-		if (Input.GetKeyDown ("space"))
+		if (Input.GetKeyDown ("space") && bIsOnGround)
 		{
 			m_YJump = transform.position.y;
 			if (Input.GetKey("left")) 
@@ -116,7 +124,8 @@ public class Controller : MonoBehaviour {
 
 		if (Input.GetKey ("left"))
 		{
-			transform.Translate (-fDelta, 0, 0);
+			if (bIsOnGround)
+			    transform.Translate (-fDelta, 0, 0);
 		}
 		else
 		{
@@ -138,7 +147,7 @@ public class Controller : MonoBehaviour {
 		else
 			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
 
-		if (Input.GetKeyDown ("space"))
+		if (Input.GetKeyDown ("space") && bIsOnGround)
 		{
 			m_YJump = transform.position.y;
 			if (Input.GetKey("right"))
@@ -152,7 +161,8 @@ public class Controller : MonoBehaviour {
 
 		if (Input.GetKey ("right"))
 		{
-			transform.Translate (fDelta, 0, 0);
+			if (bIsOnGround)
+				transform.Translate (fDelta, 0, 0);
 		}
 		else
 		{
@@ -242,32 +252,23 @@ public class Controller : MonoBehaviour {
 		if (Input.anyKey)
 			m_animator.speed = 1;
 		else
-			
+			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
 
 		if (Input.GetKey ("up"))
 		{
 			transform.Translate (0, fDelta, 0);
-			return;
 		}		
-		else
-		{
-			
-		}
 
 		if (Input.GetKey ("down"))
 		{
 			transform.Translate (0, -2 * fDelta, 0);
-			return;
-		}
-		else
-		{
-			
 		}
 
 		if (Input.GetKeyDown ("left"))
 		{
 			m_iCountAuto = 0;
 			m_YJump = transform.position.y;
+			SetBoxCollider(boxBigX, boxBigY);// vi tri cua khi cung tu dong duoc dich di tuong ung
 			m_animator.SetTrigger ("TriggerReachLeft");
 			m_iState = iReachLeft;
 			return;
@@ -282,9 +283,10 @@ public class Controller : MonoBehaviour {
 			return;
 		}
 
-		if ((transform.position.y > m_ColumnUp + fDistanceColumnY) || (transform.position.y < m_ColumnDown - fDistanceColumnY))
+		if ((transform.position.y > m_ColumnUpY + fDistanceColumnY) || (transform.position.y < m_ColumnDownY - fDistanceColumnY))
 		{
 			m_YJump = transform.position.y;
+			gameObject.transform.Translate(m_ColumnX - gameObject.transform.position.x, 0, 0);
 			m_animator.SetTrigger ("TriggerJumpRight");
 			m_iState = iJumpRight;
 			return;
@@ -304,28 +306,18 @@ public class Controller : MonoBehaviour {
 		if (Input.GetKey ("up"))
 		{
 			transform.Translate (0, fDelta, 0);
-			return;
-		}
-		else
-		{
-			
 		}
 
 		if (Input.GetKey ("down"))
 		{
 			transform.Translate (0, -2 * fDelta, 0);
-			return;
 		}
-		else
-		{
-			
-		}
-
 
 		if (Input.GetKeyDown ("right"))
 		{
 			m_iCountAuto = 0;
 			m_YJump = transform.position.y;
+			SetBoxCollider(boxBigX, boxBigY);// vi tri cua khi cung tu dong duoc dich di tuong ung
 			m_animator.SetTrigger ("TriggerReachRight");
 			m_iState = iReachRight;
 			return;
@@ -340,9 +332,10 @@ public class Controller : MonoBehaviour {
 			return;
 		}
 
-		if ((transform.position.y > m_ColumnUp + fDistanceColumnY) || (transform.position.y < m_ColumnDown - fDistanceColumnY))
+		if ((transform.position.y > m_ColumnUpY + fDistanceColumnY) || (transform.position.y < m_ColumnDownY - fDistanceColumnY))
 		{
 			m_YJump = transform.position.y;
+			gameObject.transform.Translate(m_ColumnX - gameObject.transform.position.x, 0, 0);
 			m_animator.SetTrigger ("TriggerJumpLeft");
 			m_iState = iJumpLeft;
 			return;
@@ -354,6 +347,7 @@ public class Controller : MonoBehaviour {
 		SetGravity (0);
 		m_animator.speed = 1;
 
+		SetBoxCollider ((m_RightColumnX - m_LeftColumnX) / transform.localScale.x - 0.1f / transform.localScale.x , boxBigY);
 		if (Input.anyKey)
 			m_animator.speed = 1;
 		else
@@ -362,21 +356,69 @@ public class Controller : MonoBehaviour {
 		if (Input.GetKey ("up"))
 		{
 			transform.Translate (0, 2 * fDelta, 0);
-			return;
 		}
-		else
-		{
-			
-		}
+
 		if (Input.GetKey ("down"))
 		{
 			transform.Translate (0, -fDelta, 0);
+		}
+
+		if (Input.GetKeyDown ("left"))
+		{
+			m_ColumnUpY = m_LeftColumnUpY;
+			m_ColumnDownY = m_LeftColumnDownY;
+			m_ColumnX = m_LeftColumnX;
+			SetBoxCollider(boxSmallX, boxSmallY);
+			transform.Translate(m_ColumnX - transform.position.x + fDistanceColumnX, 0, 0);
+
+			m_iCountAuto = 0;
+			m_animator.SetTrigger ("TriggerClimbRight");
+			m_iState = iClimbRight;
 			return;
 		}
-		else
+
+		if (Input.GetKeyDown ("right"))
 		{
-			
+			m_ColumnUpY = m_RightColumnUpY;
+			m_ColumnDownY = m_RightColumnDownY;
+			m_ColumnX = m_RightColumnX;
+			SetBoxCollider(boxSmallX, boxSmallY);
+			transform.Translate(m_ColumnX - transform.position.x - fDistanceColumnX, 0, 0);
+
+			m_iCountAuto = 0;
+			m_animator.SetTrigger ("TriggerClimbLeft");
+			m_iState = iClimbLeft;
+			return;
 		}
+
+		if ((transform.position.y > m_LeftColumnUpY + fDistanceColumnY) || (transform.position.y < m_LeftColumnDownY - fDistanceColumnY))
+		{
+			m_ColumnUpY = m_RightColumnUpY;
+			m_ColumnDownY = m_RightColumnDownY;
+			m_ColumnX = m_RightColumnX;
+			SetBoxCollider(boxSmallX, boxSmallY);
+			transform.Translate(m_ColumnX - transform.position.x - fDistanceColumnX, 0, 0);
+
+			m_iCountAuto = 0;
+			m_animator.SetTrigger ("TriggerClimbLeft");
+			m_iState = iClimbLeft;
+			return;
+		}
+
+		if ((transform.position.y > m_RightColumnUpY + fDistanceColumnY) || (transform.position.y < m_RightColumnDownY - fDistanceColumnY))
+		{
+			m_ColumnUpY = m_LeftColumnUpY;
+			m_ColumnDownY = m_LeftColumnDownY;
+			m_ColumnX = m_LeftColumnX;
+			SetBoxCollider(boxSmallX, boxSmallY);
+			transform.Translate(m_ColumnX - transform.position.x + fDistanceColumnX, 0, 0);
+
+			m_iCountAuto = 0;
+			m_animator.SetTrigger ("TriggerClimbRight");
+			m_iState = iClimbRight;
+			return;
+		}
+
 	}
 
 	void ProcessReachLeft()
@@ -387,14 +429,17 @@ public class Controller : MonoBehaviour {
 		if (Input.GetKeyDown ("left"))
 		{
 			m_YJump = transform.position.y;
-			transform.Translate(-0.1f, 0, 0);
+			transform.Translate(-0.1f, 0.1f, 0);
 			m_animator.SetTrigger ("TriggerJumpLeft");
 			m_iState = iJumpLeft;
 			return;
 		}
 
-		if (Input.GetKeyDown ("right"))
+		if ((Input.GetKeyDown ("right")) || (Input.GetKeyDown ("up")) || (Input.GetKeyDown("down")))
 		{
+			SetBoxCollider(boxSmallX, boxSmallY);
+			transform.Translate(m_ColumnX - transform.position.x - fDistanceColumnX, 0, 0);
+
 			m_iCountAuto = 0;
 			m_animator.SetTrigger ("TriggerClimbLeft");
 			m_iState = iClimbLeft;
@@ -410,21 +455,31 @@ public class Controller : MonoBehaviour {
 		if (Input.GetKeyDown ("right"))
 		{
 			m_YJump = transform.position.y;
-			transform.Translate(0.1f, 0, 0);
+			transform.Translate(0.1f, 0.1f, 0);
 			m_animator.SetTrigger ("TriggerJumpRight");
 			m_iState = iJumpRight;
 			return;
 		}
 
-		if (Input.GetKeyDown ("left"))
+		if ((Input.GetKeyDown ("left")) || (Input.GetKeyDown ("up")) || (Input.GetKeyDown("down")))
 		{
+			SetBoxCollider(boxSmallX, boxSmallY);
+			transform.Translate(m_ColumnX - transform.position.x + fDistanceColumnX, 0, 0);
+
 			m_iCountAuto = 0;
 			m_animator.SetTrigger ("TriggerClimbRight");
 			m_iState = iClimbRight;
 			return;
 		}
 	}
-	
+
+	void SetBoxCollider (float fX, float fY)
+	{
+		BoxCollider2D[] listBox = gameObject.GetComponents<BoxCollider2D>();
+		for (int i = 0; i < listBox.Length; i++)
+			listBox[i].size = new Vector2(fX, fY);
+	}
+
 	void Update() {
 		m_iCountAuto++;
 		if (m_iCountAuto > iMaxCount) 
@@ -433,6 +488,9 @@ public class Controller : MonoBehaviour {
 
 		if (!((m_iState == iDieLeft) || (m_iState == iDieRight)))
 			gameObject.rigidbody2D.isKinematic = false;
+		if (!((m_iState == iReachLeft) || (m_iState == iReachRight)
+		    || (m_iState == iClimbDouble)))
+			SetBoxCollider(boxSmallX, boxSmallY);
 
 		switch (m_iState)
 		{
@@ -507,21 +565,58 @@ public class Controller : MonoBehaviour {
 
 		if (coll.gameObject.tag == "Column")
 		{
-			m_ColumnUp = ((ColumnStruct) coll.gameObject.GetComponent("ColumnStruct")).yUp;
-			m_ColumnDown = ((ColumnStruct) coll.gameObject.GetComponent("ColumnStruct")).yDown;
+
 			if ((m_iState == iJumpLeft) || (m_iState == iGoLeft))
 			{
+				m_ColumnUpY = ((ColumnStruct) coll.gameObject.GetComponent("ColumnStruct")).yUp;
+				m_ColumnDownY = ((ColumnStruct) coll.gameObject.GetComponent("ColumnStruct")).yDown;
+				m_ColumnX = coll.gameObject.transform.position.x;
+
 				transform.Translate(coll.gameObject.transform.position.x - transform.position.x + fDistanceColumnX, 0, 0);
 				m_iCountAuto = 0;
                	m_animator.SetTrigger ("TriggerClimbRight");
 				m_iState = iClimbRight;
 			}
-			else if ((m_iState == iJumpRight)|| (m_iState == iGoRight))
+			else if ((m_iState == iJumpRight) || (m_iState == iGoRight))
 			{
+				m_ColumnUpY = ((ColumnStruct) coll.gameObject.GetComponent("ColumnStruct")).yUp;
+				m_ColumnDownY = ((ColumnStruct) coll.gameObject.GetComponent("ColumnStruct")).yDown;
+				m_ColumnX = coll.gameObject.transform.position.x;
+
 				transform.Translate(coll.gameObject.transform.position.x - transform.position.x - fDistanceColumnX, 0, 0);
 				m_iCountAuto = 0;
 				m_animator.SetTrigger ("TriggerClimbLeft");
 				m_iState = iClimbLeft;
+			}
+			else if ((m_iState == iReachLeft) || (m_iState == iReachRight))
+			{
+				if (m_ColumnX != coll.gameObject.transform.position.x)
+				{
+					// toa do cot va cham khac voi cot dang leo --> chuyen sang leo 2 cot
+					if (m_iState == iReachLeft)
+					{
+						m_LeftColumnUpY = ((ColumnStruct) coll.gameObject.GetComponent("ColumnStruct")).yUp;
+						m_LeftColumnDownY = ((ColumnStruct) coll.gameObject.GetComponent("ColumnStruct")).yDown;
+						m_LeftColumnX = coll.gameObject.transform.position.x;
+
+						m_RightColumnUpY = m_ColumnUpY;
+						m_RightColumnDownY = m_ColumnDownY;
+						m_RightColumnX = m_ColumnX;
+					}
+					else if (m_iState == iReachRight)
+					{
+						m_RightColumnUpY = ((ColumnStruct) coll.gameObject.GetComponent("ColumnStruct")).yUp;
+						m_RightColumnDownY = ((ColumnStruct) coll.gameObject.GetComponent("ColumnStruct")).yDown;
+						m_RightColumnX = coll.gameObject.transform.position.x;
+						
+						m_LeftColumnUpY = m_ColumnUpY;
+						m_LeftColumnDownY = m_ColumnDownY;
+						m_LeftColumnX = m_ColumnX;
+					}
+
+					m_animator.SetTrigger("TriggerClimbDouble");
+					m_iState = iClimbDouble;
+				}
 			}
 			return;
 		}
@@ -535,6 +630,7 @@ public class Controller : MonoBehaviour {
 
 		if (coll.gameObject.tag == "Ground")
 		{
+			bIsOnGround = true;
 			if ((m_iState == iJumpLeft) || (m_iState == iJumpRight) 
 			    || (m_iState == iGoLeft) || (m_iState == iGoRight)
 			    || (m_iState == iReachLeft) || (m_iState == iReachRight))
@@ -564,9 +660,11 @@ public class Controller : MonoBehaviour {
 		}
 	}
 
+
 	void OnCollisionExit2D(Collision2D coll) {
 		if (coll.gameObject.tag == "Ground")
 		{
+			bIsOnGround = false;
 			m_YJump = transform.position.y;
 		}
 	}
