@@ -13,13 +13,13 @@ public class GameOver : MonoBehaviour {
 	
 	}
 
-    public void ClickBtnContinue()
-    {
-        Application.LoadLevel("start");
-    }
-
-    public void ClickBtnExit()
-    {
-        Application.Quit();
-    }
+//     public void ClickBtnContinue()
+//     {
+//         Application.LoadLevel("start");
+//     }
+// 
+//     public void ClickBtnExit()
+//     {
+//         Application.Quit();
+//     }
 }

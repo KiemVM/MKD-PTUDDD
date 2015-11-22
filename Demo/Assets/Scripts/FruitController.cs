@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class FruitController : MonoBehaviour {
-	public AudioClip auDrop;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -27,7 +27,6 @@ public class FruitController : MonoBehaviour {
 		if (myTrigger.gameObject.tag == "Player")
 		{
 			SetGravity (1);
-			audio.PlayOneShot(auDrop);
 		}
 		if (myTrigger.gameObject.tag == "Water")
 		{

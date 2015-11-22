@@ -1,14 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class NhanVatControler : MonoBehaviour {
+
+    public Text TxGameOver;
+    public GameOver ObGameOver;
+
+    public MainCamera mainCamera;
 	public float speed = 5;
 	private Rigidbody2D myBody2d;
 	private Animator myAnimator;
 	public bool canJump = true;
 	private bool facingRight = true;
 
-	private bool bDiChuyenDoc = false;
     public int iDem = 0;
     public int myState = 0;
     private const int
@@ -27,12 +32,18 @@ public class NhanVatControler : MonoBehaviour {
     public bool bRight = false;
     public bool bUp = false;
     public bool bDown = false;
+
+    public float move = 0;
+    public bool bclick = false;
 		
 	// Use this for initialization
 	void Start () {
         myState = iDungIm;
 		myBody2d = this.rigidbody2D;
 		myAnimator = GetComponent<Animator> ();
+        mainCamera = FindObjectOfType<MainCamera>();
+        ObGameOver = FindObjectOfType<GameOver>();
+        Time.timeScale = 1;
 	}
 
     void SetGravity(int nValue)
@@ -98,20 +109,11 @@ public class NhanVatControler : MonoBehaviour {
         }
 	}
 
-// 	void OnCollisionEnter2D(Collision2D coll)
-// 	{
-// 		if(coll.gameObject.tag == "Column1")
-// 		{
-// 			bDiChuyenDoc = true;
-// 
-// 		}
-// 	}
-
     void OnCollisionEnter2D(Collision2D coll)
 	{
 		if(coll.gameObject.tag == "Column1")
 		{
-			bDiChuyenDoc = false;
+			//bDiChuyenDoc = false;
             myClumnStart = ((ColumnControler)coll.gameObject.GetComponent("ColumnControler")).yStart;
             myColumnEnd = ((ColumnControler)coll.gameObject.GetComponent("ColumnControler")).yEnd;
             if(myState == iDi)
@@ -128,21 +130,35 @@ public class NhanVatControler : MonoBehaviour {
                 myState = iTreoDay;
             }
 		}
+
+        if (coll.gameObject.tag == "DiePoint")
+        {
+
+           TxGameOver = ObGameOver.GetComponent<Text>();
+           TxGameOver.text = "Game Over";
+           Time.timeScale = 0;
+          /* System.Threading.Thread.Sleep(5*1000);*/
+         //   Application.LoadLevel(0);
+        }
 	}
 
     void ProcessDungIm()
     {
-        float move = Input.GetAxisRaw("Horizontal");
-        myAnimator.SetFloat("speed", Mathf.Abs(move));
-        myBody2d.velocity = new Vector2(move * speed, myBody2d.velocity.y);
+       // move = Input.GetAxisRaw("Horizontal");
+       if( bclick == true)
+       {
+            myAnimator.SetFloat("speed", Mathf.Abs(move));
+            myBody2d.velocity = new Vector2(move * speed, myBody2d.velocity.y);
 
-        if (facingRight == true && move < 0 )
+       }
+        if (facingRight == true && move < 0  )
         {
             facingRight = false;
             transform.rotation = Quaternion.Euler(transform.rotation.x, 180,
                                                   transform.rotation.z);
+           
         }
-        else if (facingRight == false && move > 0)
+        else if (facingRight == false && move > 0 )
         {
             facingRight = true;
             transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
@@ -208,5 +224,29 @@ public class NhanVatControler : MonoBehaviour {
     void processVoiDay()
     {
 
+    }
+
+    public void DiTrai()
+    {
+        move = -1;
+        bclick = true;
+    }
+
+    public void ThoatDiTrai()
+    {
+        move = 0;
+        bclick = false;
+    }
+
+    public void DiPhai()
+    {
+        move = 1;
+        bclick = true;
+    }
+
+    public void ThoatDiPhai()
+    {
+        move = 0;
+        bclick = false;
     }
 }

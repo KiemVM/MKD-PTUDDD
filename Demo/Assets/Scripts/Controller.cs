@@ -2,9 +2,12 @@
 using System.Collections;
 using ColumnStructNS;
 using MapStructNS;
+using UnityEngine.UI;
 
 public class Controller : MonoBehaviour {
 
+
+	
 	public const float fDistanceColumnX = 0.7f;
 	public const float fDistanceColumnY = 0.7f;
 	public const float fDelta = 0.1f;
@@ -17,6 +20,8 @@ public class Controller : MonoBehaviour {
 	public const float boxBigX = 0.25f;
 	public const float boxBigY = 0.14f;
 	public bool bIsOnGround = true;
+    public GameOver ObGameOver;
+    public Text TxGameOver;
 
 	public const int 
 		iIdle = 0,
@@ -32,8 +37,6 @@ public class Controller : MonoBehaviour {
 		iReachLeft = 10, 
 		iReachRight = 11;
 
-	public AudioClip auGo, auJump, auClimbSingle, auClimbDouble, auDie;
-
 	public float m_YJump;
 	public float m_ColumnUpY, m_ColumnDownY;
 	public float m_ColumnX;
@@ -45,12 +48,27 @@ public class Controller : MonoBehaviour {
 	public int m_iCountAuto = 0;
 	public int m_iStartDie = 0;
 
+    public bool bClick = false;
+    public bool bMoveUp = false;
+    public bool bMoveDown = false;
+    public bool bMoveLeft = false;
+    public bool bMoveRight = false;
+    public bool bJump = false;
+
+    public bool bMoveUpClick = false;
+    public bool bMoveDownClick = false;
+    public bool bMoveLeftClick = false;
+    public bool bMoveRightClick = false;
+    public bool bJumpClick = false;
+
 		
 	// Use this for initialization
 	void Start () {
 		m_iState = 0;
 		m_animator = GetComponent<Animator>();
 		m_YJump = transform.position.y;
+        ObGameOver = FindObjectOfType<GameOver>();
+        Time.timeScale = 1;
 	}
 
 	void SetGravity(int nValue)
@@ -79,31 +97,28 @@ public class Controller : MonoBehaviour {
 		SetGravity (1);
 		m_animator.speed = 1;
 
-		if (Input.GetKeyDown ("space"))
+		if (InputKeyDown(5)) //Jump
 		{
 			m_YJump = transform.position.y;
 			gameObject.rigidbody2D.velocity = new Vector2(0, fSpeedJumpY);
-			audio.loop = false;
-			audio.clip = auJump;
-			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpLeft");
 			m_iState = iJumpLeft;
+            InputkeyUp(5);
 		}
 
 
-		if (Input.GetKeyDown ("left")) 
+		if (InputKeyDown(3)) //left - 3
 		{
-			audio.loop = true;
-			audio.clip = auGo;
-			audio.Play();
 			m_animator.SetTrigger ("TriggerGoLeft");
 			m_iState = iGoLeft;
+            InputkeyUp(3);
 		}
 
-		if (Input.GetKeyDown ("right"))
+		if (InputKeyDown(4)) // right - 4
 		{
 			m_animator.SetTrigger ("TriggerGoRight");
 			m_iState = iGoRight;
+            InputkeyUp(4);
 		}
 	}
 
@@ -111,33 +126,25 @@ public class Controller : MonoBehaviour {
 	{
 		SetGravity (1);
 
-		if (Input.anyKey)
-		{
+        if (Input.anyKey || bClick == true)
 			m_animator.speed = 1;
-			audio.mute = false;
-		}
 		else
-		{
 			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
-			audio.mute = true;
-		}
 
-		if (Input.GetKeyDown ("space") && bIsOnGround)
+		if (InputKeyDown(5) && bIsOnGround) // jump
 		{
 			m_YJump = transform.position.y;
-			if (Input.GetKey("left")) 
+			if (Input.GetKey("left") || (bMoveLeft == true && bClick == true)) 
 				gameObject.rigidbody2D.velocity = new Vector2(-fSpeedJumpX, fSpeedJumpY);
 			else
 				gameObject.rigidbody2D.velocity = new Vector2(0, fSpeedJumpY);
-			audio.loop = false;
-			audio.clip = auJump;
-			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpLeft");
 			m_iState = iJumpLeft;
+            InputkeyUp(5);
 		}
 
 
-		if (Input.GetKey ("left"))
+		if (InputOnKey(3)) // left - 3
 		{
 			if (bIsOnGround)
 			    transform.Translate (-fDelta, 0, 0);
@@ -146,7 +153,7 @@ public class Controller : MonoBehaviour {
 		{
 			
 		}
-		if (Input.GetKey ("right"))
+		if (InputOnKey(4)) // right - 4
 		{
 			m_animator.SetTrigger ("TriggerGoRight");
 			m_iState = iGoRight;
@@ -157,33 +164,25 @@ public class Controller : MonoBehaviour {
 	{
 		SetGravity (1);
 
-		if (Input.anyKey)
-		{
+		if (Input.anyKey || bClick == true)
 			m_animator.speed = 1;
-			audio.mute = false;
-		}
 		else
-		{
 			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
-			audio.mute = true;
-		}
 
-		if (Input.GetKeyDown ("space") && bIsOnGround)
+		if (InputKeyDown(5) && bIsOnGround) // jump
 		{
 			m_YJump = transform.position.y;
-			if (Input.GetKey("right"))
+			if (InputOnKey(4)) // right - 4
 			    gameObject.rigidbody2D.velocity = new Vector2(fSpeedJumpX, fSpeedJumpY);
 			else
 				gameObject.rigidbody2D.velocity = new Vector2(0, fSpeedJumpY);
 
-			audio.loop = false;
-			audio.clip = auJump;
-			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpRight");
 			m_iState = iJumpRight;
+            InputkeyUp(5);
 		}
 
-		if (Input.GetKey ("right"))
+        if (InputOnKey(4)) // right
 		{
 			if (bIsOnGround)
 				transform.Translate (fDelta, 0, 0);
@@ -193,11 +192,8 @@ public class Controller : MonoBehaviour {
 			
 		}
 
-		if (Input.GetKey ("left"))
+		if (InputOnKey(3)) // left - 3
 		{
-			audio.loop = true;
-			audio.clip = auGo;
-			audio.Play();
 			m_animator.SetTrigger ("TriggerGoLeft");
 			m_iState = iGoLeft;
 		}
@@ -245,6 +241,7 @@ public class Controller : MonoBehaviour {
 			else
 			{
 				m_iStartDie = 0;
+                Die();
 			}
 		}
 		
@@ -267,6 +264,7 @@ public class Controller : MonoBehaviour {
 			else
 			{
 				m_iStartDie = 0;
+                Die();
 			}
 		}
 	}
@@ -276,46 +274,40 @@ public class Controller : MonoBehaviour {
 		SetGravity (0);
 		m_animator.speed = 1;
 
-		if (Input.anyKey)
-		{
+        if (InputAnykey())
 			m_animator.speed = 1;
-			audio.mute = false;
-		}
 		else
-		{
 			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
-			audio.mute = true;
-		}
 
-		if (Input.GetKey ("up"))
+		if (InputOnKey(1)) // up - 1
 		{
 			transform.Translate (0, fDelta, 0);
 		}		
 
-		if (Input.GetKey ("down"))
+		if (InputOnKey(2)) // down 2
 		{
 			transform.Translate (0, -2 * fDelta, 0);
 		}
 
-		if (Input.GetKeyDown ("left"))
+		if (InputKeyDown(3)) // left -3 
 		{
 			m_iCountAuto = 0;
 			m_YJump = transform.position.y;
 			SetBoxCollider(boxBigX, boxBigY);// vi tri cua khi cung tu dong duoc dich di tuong ung
 			m_animator.SetTrigger ("TriggerReachLeft");
 			m_iState = iReachLeft;
+            InputkeyUp(3);
 			return;
 		}
 
-		if (Input.GetKeyDown ("right"))
+		if (InputKeyDown(4)) //right - 4
 		{
 			m_iCountAuto = 0;
-			audio.loop = true;
-			audio.clip = auClimbSingle;
-			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbRight");
 			m_iState = iClimbRight;
 			transform.Translate(2 * fDistanceColumnX, 0, 0);
+            bMoveRightClick = false;
+            InputkeyUp(4);
 			return;
 		}
 
@@ -323,9 +315,6 @@ public class Controller : MonoBehaviour {
 		{
 			m_YJump = transform.position.y;
 			gameObject.transform.Translate(m_ColumnX - gameObject.transform.position.x, 0, 0);
-			audio.loop = false;
-			audio.clip = auJump;
-			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpRight");
 			m_iState = iJumpRight;
 			return;
@@ -337,46 +326,39 @@ public class Controller : MonoBehaviour {
 		SetGravity (0);
 		m_animator.speed = 1;
 
-		if (Input.anyKey)
-		{
+        if (InputAnykey())
 			m_animator.speed = 1;
-			audio.mute = false;
-		}
 		else
-		{
 			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
-			audio.mute = true;
-		}
 
-		if (Input.GetKey ("up"))
+		if (InputOnKey(1)) // up -1 
 		{
 			transform.Translate (0, fDelta, 0);
 		}
 
-		if (Input.GetKey ("down"))
+		if (InputOnKey(2)) // down -2 
 		{
 			transform.Translate (0, -2 * fDelta, 0);
 		}
 
-		if (Input.GetKeyDown ("right"))
+		if (InputKeyDown(4)) // right - 4
 		{
 			m_iCountAuto = 0;
 			m_YJump = transform.position.y;
 			SetBoxCollider(boxBigX, boxBigY);// vi tri cua khi cung tu dong duoc dich di tuong ung
 			m_animator.SetTrigger ("TriggerReachRight");
 			m_iState = iReachRight;
+            InputkeyUp(4);
 			return;
 		}
 
-		if (Input.GetKeyDown ("left"))
+		if (InputKeyDown(3)) // left -3
 		{
 			m_iCountAuto = 0;
 			m_animator.SetTrigger ("TriggerClimbLeft");
-			audio.loop = true;
-			audio.clip = auClimbSingle;
-			audio.Play();
 			m_iState = iClimbLeft;
 			transform.Translate(-2 * fDistanceColumnX, 0, 0);
+            InputkeyUp(3);
 			return;
 		}
 
@@ -384,9 +366,6 @@ public class Controller : MonoBehaviour {
 		{
 			m_YJump = transform.position.y;
 			gameObject.transform.Translate(m_ColumnX - gameObject.transform.position.x, 0, 0);
-			audio.loop = false;
-			audio.clip = auJump;
-			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpLeft");
 			m_iState = iJumpLeft;
 			return;
@@ -399,30 +378,22 @@ public class Controller : MonoBehaviour {
 		m_animator.speed = 1;
 
 		SetBoxCollider ((m_RightColumnX - m_LeftColumnX) / transform.localScale.x - 0.1f / transform.localScale.x , boxBigY);
-
-		if (Input.anyKey)
-		{
+        if (InputAnykey())
 			m_animator.speed = 1;
-			audio.mute = false;
-		}
 		else
-		{
 			if (m_iCountAuto == iMaxCount) m_animator.speed = 0;
-			audio.mute = true;
-		}
 
-
-		if (Input.GetKey ("up"))
+		if (InputOnKey(1))// up - 1
 		{
 			transform.Translate (0, 2 * fDelta, 0);
 		}
 
-		if (Input.GetKey ("down"))
+		if (InputOnKey(2)) // 2
 		{
 			transform.Translate (0, -fDelta, 0);
 		}
 
-		if (Input.GetKeyDown ("left"))
+		if (InputKeyDown(3)) // left
 		{
 			m_ColumnUpY = m_LeftColumnUpY;
 			m_ColumnDownY = m_LeftColumnDownY;
@@ -431,15 +402,14 @@ public class Controller : MonoBehaviour {
 			transform.Translate(m_ColumnX - transform.position.x + fDistanceColumnX, 0, 0);
 
 			m_iCountAuto = 0;
-			audio.loop = true;
-			audio.clip = auClimbSingle;
-			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbRight");
 			m_iState = iClimbRight;
+            bMoveLeftClick = false;
+            InputkeyUp(3);
 			return;
 		}
 
-		if (Input.GetKeyDown ("right"))
+		if (InputKeyDown(4)) // 4
 		{
 			m_ColumnUpY = m_RightColumnUpY;
 			m_ColumnDownY = m_RightColumnDownY;
@@ -448,11 +418,10 @@ public class Controller : MonoBehaviour {
 			transform.Translate(m_ColumnX - transform.position.x - fDistanceColumnX, 0, 0);
 
 			m_iCountAuto = 0;
-			audio.loop = true;
-			audio.clip = auClimbSingle;
-			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbLeft");
 			m_iState = iClimbLeft;
+            bMoveRightClick = false;
+            InputkeyUp(4);
 			return;
 		}
 
@@ -465,9 +434,6 @@ public class Controller : MonoBehaviour {
 			transform.Translate(m_ColumnX - transform.position.x - fDistanceColumnX, 0, 0);
 
 			m_iCountAuto = 0;
-			audio.loop = true;
-			audio.clip = auClimbSingle;
-			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbLeft");
 			m_iState = iClimbLeft;
 			return;
@@ -482,9 +448,6 @@ public class Controller : MonoBehaviour {
 			transform.Translate(m_ColumnX - transform.position.x + fDistanceColumnX, 0, 0);
 
 			m_iCountAuto = 0;
-			audio.loop = true;
-			audio.clip = auClimbSingle;
-			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbRight");
 			m_iState = iClimbRight;
 			return;
@@ -497,29 +460,27 @@ public class Controller : MonoBehaviour {
 		SetGravity(0);
 		m_animator.speed = 1;
 
-		if (Input.GetKeyDown ("left"))
+        if (InputKeyDown(3)) // 3
 		{
 			m_YJump = transform.position.y;
 			transform.Translate(-0.1f, 0.1f, 0);
-			audio.loop = false;
-			audio.clip = auJump;
-			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpLeft");
 			m_iState = iJumpLeft;
+            InputkeyUp(3);
 			return;
 		}
 
-		if ((Input.GetKeyDown ("right")) || (Input.GetKeyDown ("up")) || (Input.GetKeyDown("down")))
+        if (InputKeyDown(4) || InputKeyDown(2) || InputKeyDown(1)) // 4 - 2 -1
 		{
 			SetBoxCollider(boxSmallX, boxSmallY);
 			transform.Translate(m_ColumnX - transform.position.x - fDistanceColumnX, 0, 0);
 
 			m_iCountAuto = 0;
-			audio.loop = true;
-			audio.clip = auClimbSingle;
-			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbLeft");
 			m_iState = iClimbLeft;
+            InputkeyUp(2);
+            InputkeyUp(1);
+            InputkeyUp(4);
 			return;
 		}
 	}
@@ -529,29 +490,27 @@ public class Controller : MonoBehaviour {
 		SetGravity(0);
 		m_animator.speed = 1;
 
-		if (Input.GetKeyDown ("right"))
+        if (InputKeyDown(4)) // right - 4
 		{
 			m_YJump = transform.position.y;
 			transform.Translate(0.1f, 0.1f, 0);
-			audio.loop = false;
-			audio.clip = auJump;
-			audio.PlayOneShot(auJump);
 			m_animator.SetTrigger ("TriggerJumpRight");
 			m_iState = iJumpRight;
+            InputkeyUp(4);
 			return;
 		}
 
-		if ((Input.GetKeyDown ("left")) || (Input.GetKeyDown ("up")) || (Input.GetKeyDown("down")))
+        if (InputKeyDown(3) || InputKeyDown(1) || InputKeyDown(2)) // 3 - 1 -2
 		{
 			SetBoxCollider(boxSmallX, boxSmallY);
 			transform.Translate(m_ColumnX - transform.position.x + fDistanceColumnX, 0, 0);
 
 			m_iCountAuto = 0;
-			audio.loop = true;
-			audio.clip = auClimbSingle;
-			audio.Play();
 			m_animator.SetTrigger ("TriggerClimbRight");
 			m_iState = iClimbRight;
+            InputkeyUp(3);
+            InputkeyUp(1);
+            InputkeyUp(2);
 			return;
 		}
 	}
@@ -563,15 +522,7 @@ public class Controller : MonoBehaviour {
 			listBox[i].size = new Vector2(fX, fY);
 	}
 
-	void SetStateAnimator()
-	{
-		m_animator.SetInteger ("iState", m_iState);
-	}
-
 	void Update() {
-
-		SetStateAnimator ();
-
 		m_iCountAuto++;
 		if (m_iCountAuto > iMaxCount) 
 			m_iCountAuto = iMaxCount;
@@ -649,9 +600,6 @@ public class Controller : MonoBehaviour {
 
 		if (coll.gameObject.tag == "EnemyRed")
 		{
-			audio.loop = false;
-			audio.clip = auJump;
-			audio.PlayOneShot(auDie);
 			m_animator.SetTrigger ("TriggerDieLeft");
 			m_iState = iDieLeft;
 			return;
@@ -668,9 +616,6 @@ public class Controller : MonoBehaviour {
 
 				transform.Translate(coll.gameObject.transform.position.x - transform.position.x + fDistanceColumnX, 0, 0);
 				m_iCountAuto = 0;
-				audio.loop = true;
-				audio.clip = auClimbSingle;
-				audio.Play();
                	m_animator.SetTrigger ("TriggerClimbRight");
 				m_iState = iClimbRight;
 			}
@@ -682,9 +627,6 @@ public class Controller : MonoBehaviour {
 
 				transform.Translate(coll.gameObject.transform.position.x - transform.position.x - fDistanceColumnX, 0, 0);
 				m_iCountAuto = 0;
-				audio.loop = true;
-				audio.clip = auClimbSingle;
-				audio.Play();
 				m_animator.SetTrigger ("TriggerClimbLeft");
 				m_iState = iClimbLeft;
 			}
@@ -714,9 +656,6 @@ public class Controller : MonoBehaviour {
 						m_LeftColumnX = m_ColumnX;
 					}
 
-					audio.loop = true;
-					audio.clip = auClimbDouble;
-					audio.Play();
 					m_animator.SetTrigger("TriggerClimbDouble");
 					m_iState = iClimbDouble;
 				}
@@ -726,9 +665,6 @@ public class Controller : MonoBehaviour {
 
 		if (coll.gameObject.tag == "Water")
 		{
-			audio.loop = false;
-			audio.clip = auJump;
-			audio.PlayOneShot(auDie);
 			m_animator.SetTrigger ("TriggerDieLeft");
 			m_iState = iDieLeft;
 			return;
@@ -743,9 +679,6 @@ public class Controller : MonoBehaviour {
 			{
 				if (m_YJump - transform.position.y > iMaxHighJumpDown)
 				{
-					audio.loop = false;
-					audio.clip = auJump;
-					audio.PlayOneShot(auDie);
 					m_animator.SetTrigger("TriggerDieLeft");
 					m_iState = iDieLeft;
 					return;
@@ -756,9 +689,6 @@ public class Controller : MonoBehaviour {
 			{
 				m_iCountAuto = 0;
 				m_animator.speed = 1;
-				audio.loop = true;
-				audio.clip = auGo;
-				audio.Play();
 				m_animator.SetTrigger ("TriggerGoLeft");
 				m_iState = iGoLeft;
 			}
@@ -772,12 +702,6 @@ public class Controller : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionStay2D(Collision2D coll) {
-		if (coll.gameObject.tag == "Ground")
-		{
-			bIsOnGround = true;
-		}
-	}
 
 	void OnCollisionExit2D(Collision2D coll) {
 		if (coll.gameObject.tag == "Ground")
@@ -786,4 +710,267 @@ public class Controller : MonoBehaviour {
 			m_YJump = transform.position.y;
 		}
 	}
+
+    public void DiTrai()
+    {
+        bMoveLeft = true;
+        bClick = true;
+    }
+
+    public void ThoatDiTrai()
+    {
+        bMoveLeft = false;
+        bClick = false;
+    }
+
+    public void DiPhai()
+    {
+        bMoveRight = true;
+        bClick = true;
+    }
+
+    public void ThoatDiPhai()
+    {
+        bMoveRight = false;
+        bClick = false;
+    }
+
+    public void DiLen()
+    {
+        bMoveUp = true;
+        bClick = true;
+    }
+
+    public void ThoatDiLen()
+    {
+        bMoveUp = false;
+        bClick = false;
+    }
+
+    public void DiXuong()
+    {
+        bMoveDown = true;
+        bClick = true;
+    }
+
+    public void ThoatDiXuong()
+    {
+        bMoveDown = false;
+        bClick = false;
+    }
+
+    public void Nhay()
+    {
+        bJump = true;
+        bClick = true;
+    }
+    public void ThoatNhay()
+    {
+        bJump = false;
+    }
+
+    public void Die()
+    {
+        TxGameOver = ObGameOver.GetComponent<Text>();
+        TxGameOver.text = "Game Over";
+        Time.timeScale = 0;
+    }
+
+    public void ClickLen()
+    {
+        bMoveUpClick = true;
+    }
+
+    public void ClickXuong()
+    {
+        bMoveDownClick = true;
+    }
+
+    public void ClickTrai()
+    {
+        bMoveLeftClick = true;
+    }
+
+    public void ClickPhai()
+    {
+        bMoveRightClick = true;
+    }
+
+    public void ClickNhay()
+    {
+        bJumpClick = true;
+    }
+
+    /*
+    1 - Up
+    2 - Down
+    3- Left
+    4 - Right
+    5 - Jump*/
+    public bool InputOnKey(int ikey)
+    {
+        bool bRet = false;
+        switch (ikey)
+        {
+            case 1:
+                {
+                    if (Input.GetKey("up") || (bMoveUp == true && bClick == true))
+                    {
+                        bRet = true;
+                    }
+                    break;
+                }
+
+            case 2:
+                {
+                    if (Input.GetKey("down") || (bMoveDown == true && bClick == true))
+                    {
+                        bRet = true;
+                    }
+                    break;
+                }
+
+            case 3:
+                {
+                    if (Input.GetKey("left") || (bMoveLeft == true && bClick == true))
+                    {
+                        bRet = true;
+                    }
+                    break;
+                }
+
+            case 4:
+                {
+                    if (Input.GetKey("right") || (bMoveRight == true && bClick == true))
+                    {
+                        bRet = true;
+                    }
+                    break;
+                }
+
+            case 5:
+                {
+                    if (Input.GetKey("space") || (bJump == true && bClick == true))
+                    {
+                        bRet = true;
+                    }
+                    break;
+                }
+        }
+        return bRet;
+    }
+
+
+    /*
+     1 - Up
+     2 - Down
+     3- Left
+     4 - Right
+     5 - Jump*/
+    public bool InputKeyDown(int ikey)
+    {
+        bool bRet = false;
+        switch(ikey)
+        {
+            case 1:
+                {
+                    if (Input.GetKeyDown("up") || (bMoveUpClick == true && bClick == true))
+                    {
+                        bRet = true;
+                    }
+                    break;
+                }
+
+            case 2:
+                {
+                    if (Input.GetKeyDown("down") || (bMoveDownClick == true && bClick == true))
+                    {
+                        bRet = true;
+                    }
+                    break;
+                }
+
+            case 3:
+                {
+                   if( Input.GetKeyDown ("left") || (bMoveLeftClick == true && bClick == true))
+                   {
+                       bRet = true;
+                   }
+                   break;
+                }
+
+            case 4:
+                {
+                    if (Input.GetKeyDown("right") || (bMoveRightClick == true && bClick == true))
+                    {
+                        bRet = true;
+                    }
+                    break;
+                }
+
+            case 5:
+                {
+                    if (Input.GetKeyDown("space") || (bJumpClick == true && bClick == true))
+                    {
+                        bRet = true;
+                    }
+                    break;
+                }
+        }
+        
+        return bRet;
+    }
+
+    /*
+    1 - Up
+    2 - Down
+    3- Left
+    4 - Right
+    5 - Jump*/
+    public bool InputkeyUp(int ikey)
+    {
+        bool bRet = false;
+        switch (ikey)
+        {
+            case 1:
+                {
+                    bMoveUpClick = false;
+                    break;
+                }
+
+            case 2:
+                {
+                    bMoveDownClick = false;
+                    break;
+                }
+
+            case 3:
+                {
+                    bMoveLeftClick = false;
+                    break;
+                }
+
+            case 4:
+                {
+                    bMoveRightClick = false;
+                    break;
+                }
+
+            case 5:
+                {
+                    bJumpClick = false;
+                    break;
+                }
+        }
+        return bRet;
+    }
+
+    public bool InputAnykey()
+    {
+        if(Input.anyKey || bClick == true)
+        {
+            return true;
+        }
+        return false;
+    }
 }

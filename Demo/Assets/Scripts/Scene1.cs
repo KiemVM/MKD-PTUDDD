@@ -18,7 +18,7 @@ public class Scene1 : MonoBehaviour {
 
     public void ClickBtnStart()
     {
-        Application.LoadLevel("Start");
+        Application.LoadLevel(0);
 
     }
 
